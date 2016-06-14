@@ -10,6 +10,7 @@
       "pre-commit": [
         "npm run deps",
         "npm test",
+        "cd test; npm test",
         "npm run ban"
       ],
       "pre-push": [
@@ -25,7 +26,11 @@
   "engines": {
     "node": ">=6"
   },
+  "bin": {
+    "rollem": "bin/rollem.js"
+  },
   "files": [
+    "bin/*.js",
     "src/*.js",
     "!src/*-spec.js"
   ],
@@ -49,10 +54,10 @@
   "scripts": {
     "ban": "ban",
     "deps": "deps-ok",
-    "format": "standard-format -w src/*.js",
+    "format": "standard-format -w bin/*.js src/*.js",
     "issues": "git-issues",
     "license": "license-checker --production --onlyunknown --csv",
-    "lint": "standard --verbose src/*.js",
+    "lint": "standard --verbose bin/*.js src/*.js",
     "pretest": "npm run format && npm run lint",
     "secure": "nsp check",
     "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
@@ -69,5 +74,9 @@
     "pre-git": "3.9.0",
     "standard": "7.1.2",
     "standard-format": "2.2.1"
+  },
+  "dependencies": {
+    "debug": "2.2.0",
+    "rollup": "0.31.2"
   }
 }

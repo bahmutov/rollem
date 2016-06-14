@@ -13,7 +13,7 @@
 right out of the box. **Rollem** just handles a simple case
 
 ```js
-// rollup.config.js
+// rollem.config.js
 module.exports = [{
   entry: 'src/foo.js',
   dest: 'dist/foo.js'
@@ -30,9 +30,17 @@ Which builds two bundles `dist/foo.js` and `dist/bar.js` when you run
 
 ```sh
 npm install -D rollem
-// create rollup.config.js shown above
+// create rollem.config.js shown above
 // then set script command
 "build": "rollem"
+```
+
+## Debug
+
+If something is wrong, run the tool with debug output enabled
+
+```sh
+DEBUG=rollem rollem
 ```
 
 ### Small print
