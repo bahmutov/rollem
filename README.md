@@ -38,6 +38,18 @@ npm install -D rollem
 You can pass `--watch` option in the command to enable simple bundle rebuild
 on changes.
 
+## rollem.config.js
+
+Almost the same syntax as [rollup.config.js](http://rollupjs.org/guide/#using-config-files)
+but uses ES5 "module.exports" syntax. It is loaded using Node `require` call, thus you can
+use JavaScript module to create the list of configs dynamically.
+
+```js
+// rollem.config.js
+const configs = glob.sync('src/**/*-spec.js').map(toConfig)
+module.exports = configs
+```
+
 ## API
 
 In addition to the simple command line, you can use **rollem** via its
