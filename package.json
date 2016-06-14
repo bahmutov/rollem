@@ -1,7 +1,7 @@
 {
   "name": "rollem",
+  "version": "0.0.0-semantic-release",
   "description": "Roll up multiple ES6 bundles at once",
-  "version": "1.0.0",
   "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
   "bugs": "https://github.com/bahmutov/rollem/issues",
   "config": {
@@ -62,7 +62,8 @@
     "secure": "nsp check",
     "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
     "test": "npm run unit",
-    "unit": "mocha src/*-spec.js"
+    "unit": "mocha src/*-spec.js",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "devDependencies": {
     "ban-sensitive-files": "1.8.3",
@@ -73,7 +74,8 @@
     "nsp": "2.4.0",
     "pre-git": "3.9.0",
     "standard": "7.1.2",
-    "standard-format": "2.2.1"
+    "standard-format": "2.2.1",
+    "semantic-release": "^4.3.5"
   },
   "dependencies": {
     "debug": "2.2.0",
