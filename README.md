@@ -28,11 +28,44 @@ Which builds two bundles `dist/foo.js` and `dist/bar.js` when you run
 
 ## Install and use
 
-```sh
+```text
 npm install -D rollem
 // create rollem.config.js shown above
 // then set script command
 "build": "rollem"
+```
+
+You can pass `--watch` option in the command to enable simple bundle rebuild
+on changes.
+
+## API
+
+In addition to the simple command line, you can use **rollem** via its
+module API. It exports a single function
+
+```js
+const rollem = require('rollem')
+rollem(configs, options)
+```
+
+* `configs` - simple Array of Rollup config objects
+* `options` - object with options, right now only `watch` property is
+  supported.
+
+The `rollem(configs, options)` returns a Promise, resolved after the
+bundles have been built.
+
+If you run `rollem(configs, {watch: true})` then the resolved Promise will
+give you an event emitter. Every time there is a file change, you first
+will get "changed" event, and after the bundles have been built you will
+get an event "rolled".
+
+```js
+rollem(configs, {watch: true})
+  .then((ee) => {
+    ee.on('changed', () => console.log('bundles will be rebuilt'))
+    ee.on('rolled', () => console.log('new bundles have been built'))
+  })
 ```
 
 ## Debug

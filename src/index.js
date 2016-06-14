@@ -2,6 +2,8 @@
 
 const debug = require('debug')('rollem')
 const rollup = require('rollup')
+const R = require('ramda')
+const path = require('path')
 
 function buildBundle (config) {
   return rollup.rollup(config)
@@ -26,23 +28,40 @@ function buildBundles (configs) {
     })
 }
 
-function rollem (config, options) {
+function collectInputFolders (configs) {
+  return R.uniq(
+    R.map(path.dirname,
+      R.map(R.prop('entry'), configs)
+    )
+  )
+}
+
+function rollem (configs, options) {
   debug('Rollem configs')
-  debug(config)
+  debug(configs)
   debug('Rollem options', options)
 
-  console.assert(Array.isArray(config), 'expected list of configs')
+  console.assert(Array.isArray(configs), 'expected list of configs')
 
   if (options.watch) {
-    console.log('watching source files for changes')
-  // const watch = require('watch')
-  // // TODO determine what to watch from source configs
-  // watch.watchTree(sourceFolder, function onFileChange () {
-  //   // will be called on the initial setup
-  //   buildBundles(config)
-  // })
+    const folders = collectInputFolders(configs)
+    console.log('watching source folders for changes', folders)
+
+    const watch = require('watch')
+    const EventEmitter = require('events')
+    const watcher = new EventEmitter()
+
+    folders.forEach((sourceFolder) => {
+      watch.watchTree(sourceFolder, function onFileChange () {
+        // will be called on the initial setup
+        watcher.emit('changed')
+        buildBundles(configs)
+          .then(() => watcher.emit('rolled'))
+      })
+    })
+    return Promise.resolve(watcher)
   } else {
-    return buildBundles(config)
+    return buildBundles(configs)
   }
 }
 
