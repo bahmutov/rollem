@@ -80,6 +80,11 @@ rollem(configs, {watch: true})
   })
 ```
 
+The **rollem** in watch mode tries to determine the folder to watch from the source files.
+Because it only knows about the top level entry file, it just grabs and watches 
+the top parent folders. For example, if entries specify `src/entry.js, src/foo/bar.js` then
+the top parent folder watched will be `src`.
+
 ## Debug
 
 If something is wrong, run the tool with debug output enabled

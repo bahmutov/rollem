@@ -3,7 +3,7 @@
 const debug = require('debug')('rollem')
 const rollup = require('rollup')
 const R = require('ramda')
-const mergeFolders = require('./merge-folders')
+const mergeFolders = require('./merge-folders').merge
 
 function buildBundle (config) {
   return rollup.rollup(config)
