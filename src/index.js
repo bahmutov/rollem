@@ -37,6 +37,7 @@ function collectInputFolders (configs) {
 }
 
 function rollem (configs, options) {
+  options = options || {}
   debug('Rollem configs')
   debug(configs)
   debug('Rollem options', options)
