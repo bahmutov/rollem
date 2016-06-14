@@ -65,7 +65,7 @@ rollem(configs, options)
   supported.
 
 The `rollem(configs, options)` returns a Promise, resolved after the
-bundles have been built.
+bundles have been built. The promise is resolved with the list of built files.
 
 If you run `rollem(configs, {watch: true})` then the resolved Promise will
 give you an event emitter. Every time there is a file change, you first

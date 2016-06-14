@@ -10,7 +10,7 @@
       "pre-commit": [
         "npm run deps",
         "npm test",
-        "cd test; npm test",
+        "npm run e2e",
         "npm run ban"
       ],
       "pre-push": [
@@ -63,7 +63,8 @@
     "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
     "test": "npm run unit",
     "unit": "mocha src/*-spec.js",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "e2e": "cd test; npm test"
   },
   "devDependencies": {
     "ban-sensitive-files": "1.8.3",

@@ -3,7 +3,7 @@
 const debug = require('debug')('rollem')
 const rollup = require('rollup')
 const R = require('ramda')
-const path = require('path')
+const mergeFolders = require('./merge-folders')
 
 function buildBundle (config) {
   return rollup.rollup(config)
@@ -29,11 +29,8 @@ function buildBundles (configs) {
 }
 
 function collectInputFolders (configs) {
-  return R.uniq(
-    R.map(path.dirname,
-      R.map(R.prop('entry'), configs)
-    )
-  )
+  const filenames = R.map(R.prop('entry'), configs)
+  return mergeFolders(filenames)
 }
 
 function rollem (configs, options) {
