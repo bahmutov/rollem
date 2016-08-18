@@ -20,7 +20,7 @@ module.exports = [{
 }, {
   entry: 'src/bar.js',
   dest: 'dist/bar.js'
-}]]
+}]
 ```
 
 Which builds two bundles `dist/foo.js` and `dist/bar.js` when you run
