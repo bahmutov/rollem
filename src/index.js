@@ -10,7 +10,8 @@ function buildBundle (config) {
     .then(function (bundle) {
       return bundle.write({
         format: config.format || 'es6',
-        dest: config.dest
+        dest: config.dest,
+        moduleName: config.moduleName
       }).then(() => config.dest)
     })
 }

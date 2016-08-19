@@ -3,5 +3,7 @@ module.exports = [{
   dest: 'dist/foo.js'
 }, {
   entry: 'src/child-folder/bar.js',
-  dest: 'dist/bar.js'
+  dest: 'dist/bar.js',
+  format: 'umd',
+  moduleName: 'bar'
 }]
