@@ -64,7 +64,9 @@
     "test": "npm run unit",
     "unit": "mocha src/*-spec.js",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "e2e": "cd test; npm test"
+    "test-default-es5": "cd test/es5-config; npm test",
+    "test-specified-es5": "cd test/specific-config; npm test",
+    "e2e": "npm run test-default-es5 && npm run test-specified-es5"
   },
   "devDependencies": {
     "ban-sensitive-files": "1.8.3",
@@ -82,6 +84,7 @@
   },
   "dependencies": {
     "debug": "2.2.0",
+    "minimist": "1.2.0",
     "ramda": "0.21.0",
     "rollup": "0.31.2",
     "watch": "0.18.0"

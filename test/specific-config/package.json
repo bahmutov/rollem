@@ -1,0 +1,13 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bar.js",
+  "scripts": {
+    "test": "node ../../bin/rollem.js -c a.config.js",
+    "watch": "node ../../bin/rollem.js -c a.config.js --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

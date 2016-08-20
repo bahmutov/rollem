@@ -38,6 +38,8 @@ npm install -D rollem
 You can pass `--watch` option in the command to enable simple bundle rebuild
 on changes.
 
+You can pass `-c <filename>` to specify a different config file.
+
 ## rollem.config.js
 
 Almost the same syntax as [rollup.config.js](http://rollupjs.org/guide/#using-config-files)
@@ -81,7 +83,7 @@ rollem(configs, {watch: true})
 ```
 
 The **rollem** in watch mode tries to determine the folder to watch from the source files.
-Because it only knows about the top level entry file, it just grabs and watches 
+Because it only knows about the top level entry file, it just grabs and watches
 the top parent folders. For example, if entries specify `src/entry.js, src/foo/bar.js` then
 the top parent folder watched will be `src`.
 

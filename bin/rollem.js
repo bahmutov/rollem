@@ -4,8 +4,11 @@
 
 const fs = require('fs')
 const join = require('path').join
+const argv = require('minimist')(process.argv.slice(2))
 
-const configName = join(process.cwd(), 'rollem.config.js')
+const configFilename = argv.c || 'rollem.config.js'
+
+const configName = join(process.cwd(), configFilename)
 if (!fs.existsSync(configName)) {
   console.error('Cannot find', configName)
   process.exit(-1)
