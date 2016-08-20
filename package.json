@@ -66,7 +66,8 @@
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "test-default-es5": "cd test/es5-config; npm test",
     "test-specified-es5": "cd test/specific-config; npm test",
-    "e2e": "npm run test-default-es5 && npm run test-specified-es5"
+    "test-es6": "cd test/es6-config; npm test",
+    "e2e": "npm run test-default-es5 && npm run test-specified-es5 && npm run test-es6"
   },
   "devDependencies": {
     "ban-sensitive-files": "1.8.3",

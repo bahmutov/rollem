@@ -8,6 +8,8 @@
 [![semantic-release][semantic-image] ][semantic-url]
 [![js-standard-style][standard-image]][standard-url]
 
+## Why?
+
 [Rollup](http://rollupjs.org/) is great, but
 [does not handle multiple bundles](https://github.com/rollup/rollup/issues/703)
 right out of the box. **Rollem** just handles a simple case
@@ -43,13 +45,25 @@ You can pass `-c <filename>` to specify a different config file.
 ## rollem.config.js
 
 Almost the same syntax as [rollup.config.js](http://rollupjs.org/guide/#using-config-files)
-but uses ES5 "module.exports" syntax. It is loaded using Node `require` call, thus you can
-use JavaScript module to create the list of configs dynamically.
+but exports an Array. You can use JavaScript module to create the list of configs dynamically.
 
 ```js
-// rollem.config.js
+// rollem.config.js with ES5
 const configs = glob.sync('src/**/*-spec.js').map(toConfig)
 module.exports = configs
+```
+
+```js
+// rollem.config.js with ES6
+export default [{
+  entry: 'src/foo.js',
+  dest: 'dist/foo.js'
+}, {
+  entry: 'src/child-folder/bar.js',
+  dest: 'dist/bar.js',
+  format: 'umd',
+  moduleName: 'bar'
+}]
 ```
 
 ## API

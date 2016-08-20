@@ -14,7 +14,7 @@ if (!fs.existsSync(configName)) {
   process.exit(-1)
 }
 
-const config = require(configName)
+const rollup = require('rollup')
 const rollem = require(join(__dirname, '..'))
 
 function isWatchArgument (arg) {
@@ -25,10 +25,19 @@ const options = {
   watch: isWatching
 }
 
-rollem(config, options)
-  .catch((err) => {
-    console.error('Problem rolling them')
-    console.error(err.message)
-    console.error(err.stack)
-    process.exit(-1)
+rollup.rollup({
+  entry: configFilename
+}).then(function (bundle) {
+  const {code} = bundle.generate({
+    format: 'cjs'
   })
+  const config = eval(code) // eslint-disable-line no-eval
+
+  rollem(config, options)
+    .catch((err) => {
+      console.error('Problem rolling them')
+      console.error(err.message)
+      console.error(err.stack)
+      process.exit(-1)
+    })
+}).catch(console.error)
