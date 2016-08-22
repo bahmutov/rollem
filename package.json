@@ -83,7 +83,8 @@
     "rollup-plugin-node-resolve": "2.0.0",
     "semantic-release": "^4.3.5",
     "standard": "7.1.2",
-    "standard-format": "2.2.1"
+    "standard-format": "2.2.1",
+    "stop-build": "1.0.1"
   },
   "dependencies": {
     "debug": "2.2.0",
