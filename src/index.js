@@ -20,7 +20,7 @@ function buildBundles (configs) {
   const promises = configs.map(buildBundle)
   return Promise.all(promises)
     .then((bundles) => {
-      console.log('built %d bundles', configs.length)
+      console.log('[%s] built %d bundles', new Date().toTimeString().substr(0, 8), configs.length)
       debug(bundles)
       return bundles
     })
@@ -44,7 +44,7 @@ function rollem (configs, options) {
 
   if (options.watch) {
     const folders = collectInputFolders(configs)
-    console.log('watching source folders for changes', folders)
+    console.log('[%s] watching source folders for changes', new Date().toTimeString().substr(0, 8), folders)
 
     const watch = require('watch')
     const EventEmitter = require('events')
