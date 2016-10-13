@@ -62,7 +62,8 @@ export default [{
   entry: 'src/child-folder/bar.js',
   dest: 'dist/bar.js',
   format: 'umd',
-  moduleName: 'bar'
+  moduleName: 'bar',
+  sourceMap: 'inline'
 }]
 ```
 
