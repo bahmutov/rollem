@@ -11,7 +11,8 @@ function buildBundle (config) {
       return bundle.write({
         format: config.format || 'es6',
         dest: config.dest,
-        moduleName: config.moduleName
+        moduleName: config.moduleName,
+        sourceMap: config.sourceMap
       }).then(() => config.dest)
     })
 }
