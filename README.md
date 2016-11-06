@@ -2,8 +2,7 @@
 
 > Roll up multiple ES6 bundles at once
 
-[![NPM][npm-icon] ][npm-url]
-
+[![npm version](https://badge.fury.io/js/rollem.svg)](https://badge.fury.io/js/rollem)
 [![Build status][ci-image] ][ci-url]
 [![semantic-release][semantic-image] ][semantic-url]
 [![js-standard-style][standard-image]][standard-url]
