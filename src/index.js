@@ -9,7 +9,7 @@ function buildBundle (config) {
   return rollup.rollup(config)
     .then(function (bundle) {
       return bundle.write({
-        format: config.format || 'es6',
+        format: config.format || 'es',
         dest: config.dest,
         globals: config.globals,
         moduleName: config.moduleName,
