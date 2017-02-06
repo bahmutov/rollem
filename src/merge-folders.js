@@ -13,8 +13,7 @@ function isChildFolder (childPath, parentPath) {
 }
 
 function mergeWatchedFolders (filenames) {
-  const folders = R.map(path.dirname, filenames)
-  const cleanedFolders = R.map(path.normalize, folders)
+  const cleanedFolders = R.map(R.compose(path.normalize, path.dirname), filenames)
   const uniqFolders = R.uniq(cleanedFolders)
 
   // eliminate any folder that is a child of another folder
