@@ -32,7 +32,7 @@ function buildBundles (configs) {
 }
 
 function collectInputFolders (configs) {
-  const filenames = R.flatten(R.map(R.prop('entry'), configs))
+  const filenames = R.map(R.prop('entry'), configs)
   return mergeFolders(filenames)
 }
 

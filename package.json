@@ -68,7 +68,8 @@
     "test-specified-es5": "cd test/specific-config; npm test",
     "test-es6": "cd test/es6-config; npm test",
     "test-plugins": "cd test/with-plugins; npm test",
-    "e2e": "npm run test-default-es5 && npm run test-specified-es5 && npm run test-es6 && npm run test-plugins"
+    "test-multi-entry": "cd test/with-multi-entry-plugin; npm test",
+    "e2e": "npm run test-default-es5 && npm run test-specified-es5 && npm run test-es6 && npm run test-plugins && npm run test-multi-entry"
   },
   "devDependencies": {
     "ban-sensitive-files": "1.8.3",
