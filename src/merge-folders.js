@@ -18,11 +18,7 @@ function mergeWatchedFolders (filenames) {
   const uniqFolders = R.uniq(cleanedFolders)
 
   // eliminate any folder that is a child of another folder
-  return uniqFolders.filter((folder) => {
-    return !uniqFolders.some((possibleParent) => {
-      return isChildFolder(folder, possibleParent)
-    })
-  })
+  return uniqFolders.filter((folder) => R.none(isChildFolder.bind(null, folder), uniqFolders))
 }
 
 module.exports = {
