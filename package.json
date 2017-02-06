@@ -92,7 +92,7 @@
     "debug": "2.2.0",
     "minimist": "1.2.0",
     "ramda": "0.21.0",
-    "rollup": "0.37.0",
+    "rollup": "0.41.4",
     "watch-glob": "0.1.3"
   }
 }
