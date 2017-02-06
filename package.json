@@ -81,6 +81,7 @@
     "nsp": "2.4.0",
     "pre-git": "3.9.0",
     "rollup-plugin-node-resolve": "2.0.0",
+	"rollup-plugin-multi-entry": "^2.0.1",
     "semantic-release": "^4.3.5",
     "standard": "7.1.2",
     "standard-format": "2.2.1",
