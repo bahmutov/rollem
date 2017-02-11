@@ -58,6 +58,20 @@ describe('merge folders', () => {
     la(equals(merged, [path.normalize('foo/**')]), merged)
   })
   
+  it('appends ** at the end of folders, if necessary for glob watcher', () => {
+    const files1 = ['foo/bar']
+    const merged1 = merge(files1)
+    la(equals(merged1[0], path.normalize('foo/bar/**')), 'test1: ' + merged1[0])
+    
+    const files2 = ['foo/bar/**']
+    const merged2 = merge(files2)
+    la(equals(merged2[0], path.normalize('foo/bar/**')), 'test2: ' + merged2[0])
+    
+    const files3 = ['foo/**/bar']
+    const merged3 = merge(files3)
+    la(equals(merged3[0], path.normalize('foo/**/bar/**')), 'test3: ' + merged3[0])
+  })
+  
   describe('glob normalization', () => {
     const normalizeGlob = require('./merge-folders').normalizeGlob
     
@@ -116,6 +130,10 @@ describe('merge folders', () => {
       const p3 = 'foo/x/**'
       const c3 = 'foo/bar'
       la(!isChild(c3, p3), 'test3: ' + path.relative(p3, c3))
+      
+      const p4 = 'foo/**'
+      const c4 = 'foo/bar/baz'
+      la(isChild(c4, p4), 'test4: ' + path.relative(p4, c4))
     })
   })
 })
