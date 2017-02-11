@@ -4,7 +4,7 @@
   "description": "",
   "main": "bar.js",
   "scripts": {
-    "test": "node ../../bin/rollem.js",
+    "test": "node ../../bin/rollem.js -c rollem.config.js",
     "watch": "node ../../bin/rollem.js --watch"
   },
   "keywords": [],

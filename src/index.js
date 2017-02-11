@@ -52,7 +52,14 @@ function rollem (configs, options) {
     const EventEmitter = require('events')
     const watcher = new EventEmitter()
     
-    watchGlob(folders, {callbackArg: 'relative'}, () => {
+    console.log('**********0')
+    console.log(folders);
+    console.log('**********01')
+    
+    watchGlob(folders, {callbackArg: 'relative'}, function(){
+        console.log('**********1')
+        console.log(arguments)
+        console.log('**********2')
         watcher.emit('changed')
         buildBundles(configs)
           .then(() => watcher.emit('rolled'))
