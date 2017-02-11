@@ -9,8 +9,8 @@ function isParentFolder (parentPath, childPath) {
   
   if (relative) {
     if (relative.startsWith('..')) {
-      // from 'foo/**' and 'foo/bar' the first should be considered as a parent folder
-      if (relative.split(path.sep).length === 2 && parentPath.endsWith('**')) {
+      // ** should always be chosen over any specified folders
+      if (parentPath.endsWith('**') && relative.split(path.sep)[1] !== '..') {
         retValue = true
       }
     } else {
@@ -27,7 +27,19 @@ function isChildFolder (childPath, parentPath) {
 
 function normalizeGlob (folder) {
   // collapses multiple sequential '**/' parts into a single '**/'
-  return folder.replace(/\*\*([\\/])(?:\*\*[\\/])+/, '**$1')
+  return folder.replace(/\*\*([\\/])(?:\*\*[\\/])+/g, '**$1')
+}
+
+function appendDoubleStars (folder) {
+  return folder + (
+    folder.endsWith(path.sep + '**')
+    ? ''
+    : (folder.endsWith(path.sep) ? '' : path.sep) + '**'
+  )
+}
+
+function globifyFolders (folders) {
+  return R.map(appendDoubleStars, folders)
 }
 
 function mergeWatchedFolders (filenames) {
@@ -40,6 +52,8 @@ function mergeWatchedFolders (filenames) {
 }
 
 module.exports = {
+  appendDoubleStars: appendDoubleStars,
+  globify: globifyFolders,
   normalizeGlob: normalizeGlob,
   isParentFolder: isParentFolder,
   isChildFolder: isChildFolder,

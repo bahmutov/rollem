@@ -4,6 +4,7 @@ const debug = require('debug')('rollem')
 const rollup = require('rollup')
 const R = require('ramda')
 const mergeFolders = require('./merge-folders').merge
+const globifyFolders = require('./merge-folders').globify
 
 function buildBundle (config) {
   return rollup.rollup(config)
@@ -33,7 +34,7 @@ function buildBundles (configs) {
 
 function collectInputFolders (configs) {
   const filenames = R.map(R.prop('entry'), configs)
-  return mergeFolders(filenames)
+  return globifyFolders(mergeFolders(filenames))
 }
 
 function rollem (configs, options) {
@@ -52,14 +53,7 @@ function rollem (configs, options) {
     const EventEmitter = require('events')
     const watcher = new EventEmitter()
     
-    console.log('**********0')
-    console.log(folders);
-    console.log('**********01')
-    
-    watchGlob(folders, {callbackArg: 'relative'}, function(){
-        console.log('**********1')
-        console.log(arguments)
-        console.log('**********2')
+    watchGlob(folders, {callbackArg: 'relative'}, () => {
         watcher.emit('changed')
         buildBundles(configs)
           .then(() => watcher.emit('rolled'))

@@ -58,18 +58,23 @@ describe('merge folders', () => {
     la(equals(merged, [path.normalize('foo/**')]), merged)
   })
   
-  it('appends ** at the end of folders, if necessary for glob watcher', () => {
-    const files1 = ['foo/bar']
-    const merged1 = merge(files1)
-    la(equals(merged1[0], path.normalize('foo/bar/**')), 'test1: ' + merged1[0])
+  describe('folder globifier', () => {
+    // const globify = require('./merge-folders').globify
+    const appendDoubleStars = require('./merge-folders').appendDoubleStars
     
-    const files2 = ['foo/bar/**']
-    const merged2 = merge(files2)
-    la(equals(merged2[0], path.normalize('foo/bar/**')), 'test2: ' + merged2[0])
-    
-    const files3 = ['foo/**/bar']
-    const merged3 = merge(files3)
-    la(equals(merged3[0], path.normalize('foo/**/bar/**')), 'test3: ' + merged3[0])
+    it('appends ** at the end of folders, if necessary', () => {
+      const file1 = path.normalize('foo/bar')
+      const globbed1 = appendDoubleStars(file1)
+      la(equals(globbed1, path.normalize('foo/bar/**')), 'test1: ' + globbed1)
+      
+      const file2 = path.normalize('foo/bar/**')
+      const globbed2 = appendDoubleStars(file2)
+      la(equals(globbed2, path.normalize('foo/bar/**')), 'test2: ' + globbed2)
+      
+      const file3 = path.normalize('foo/**/bar')
+      const globbed3 = appendDoubleStars(file3)
+      la(equals(globbed3, path.normalize('foo/**/bar/**')), 'test3: ' + globbed3)
+    })
   })
   
   describe('glob normalization', () => {
@@ -80,9 +85,13 @@ describe('merge folders', () => {
       const cleanedFolder1 = normalizeGlob(folder1)
       la(equals(cleanedFolder1, 'foo/**/bar'), 'test1: ' + cleanedFolder1)
       
-      const folder2 = 'foo\\**\\**\\**/bar'
+      const folder2 = 'foo\\**\\**\\**\\bar'
       const cleanedFolder2 = normalizeGlob(folder2)
       la(equals(cleanedFolder2, 'foo\\**\\bar'), 'test2: ' + cleanedFolder2)
+      
+      const folder3 = 'foo/**/**/bar/**/**/**/baz'
+      const cleanedFolder3 = normalizeGlob(folder3)
+      la(equals(cleanedFolder3, 'foo/**/bar/**/baz'), 'test3: ' + cleanedFolder3)
     })
   })
   
@@ -121,19 +130,19 @@ describe('merge folders', () => {
     it('takes ** as the parent among other folders, if it\'s on the end and compared folders have the same depth', () => {
       const p1 = 'foo/**'
       const c1 = 'foo/bar'
-      la(isChild(c1, p1), 'test1: ' + path.relative(p1, c1))
+      la(isChild(c1, p1), 'test1: parent=' + path.normalize(p1) + '; child=' + path.normalize(c1) + ' >> ' + path.relative(p1, c1))
       
       const p2 = 'foo/**/x'
       const c2 = 'foo/bar'
-      la(!isChild(c2, p2), 'test2: ' + path.relative(p2, c2))
+      la(!isChild(c2, p2), 'test2: parent=' + path.normalize(p2) + '; child=' + path.normalize(c2) + ' >> ' + path.relative(p2, c2))
       
       const p3 = 'foo/x/**'
       const c3 = 'foo/bar'
-      la(!isChild(c3, p3), 'test3: ' + path.relative(p3, c3))
+      la(!isChild(c3, p3), 'test3: parent=' + path.normalize(p3) + '; child=' + path.normalize(c3) + ' >> ' + path.relative(p3, c3))
       
       const p4 = 'foo/**'
       const c4 = 'foo/bar/baz'
-      la(isChild(c4, p4), 'test4: ' + path.relative(p4, c4))
+      la(isChild(c4, p4), 'test4: parent=' + path.normalize(p4) + '; child=' + path.normalize(c4) + ' >> ' + path.relative(p4, c4))
     })
   })
 })
