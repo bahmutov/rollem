@@ -56,10 +56,16 @@ const appendDoubleStars = R.when(
 
 const globifyFolders = R.map(appendDoubleStars)
 
-const mergeWatchedFolders = R.curry(filenames => {
-  const uniqFolders = getUniqueFolders(filenames)
-  return R.reject(R.compose(R.any(R.__, uniqFolders), isChildFolder), uniqFolders)
-})
+const removeChildFolders = R.converge(R.reject, [
+  R.compose(
+    R.flip(R.compose)(isChildFolder, R.__),
+    R.flip(R.any),
+    R.identity
+  ),
+  R.identity
+])
+
+const mergeWatchedFolders = R.compose(removeChildFolders, getUniqueFolders)
 
 module.exports = {
   appendDoubleStars: appendDoubleStars,
