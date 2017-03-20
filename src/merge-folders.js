@@ -15,32 +15,41 @@ const getUniqueFolders = R.compose(
   R.flatten
 )
 
-const isParentFolder = R.curry((parentPath, childPath) => R.compose(
-  R.ifElse(
-    R.complement(R.isEmpty),
+const isSiblingFolder = R.compose(R.not, R.propEq(1, '..'), R.split(path.sep))
+const isIndefiniteFolder = endsWith('**')
+
+const isParentFolder = R.curry((parentPath, childPath) => {
+  const isParentIndefinite = isIndefiniteFolder(parentPath)
+  
+  const compareFolders = R.compose(
     R.ifElse(
-      startsWith('..'),
-      // ** should always be chosen over any specified folders
-      R.compose(
-        R.and(endsWith('**')(parentPath)),
-        R.compose(R.not, R.equals('..'), R.nth(1), R.split(path.sep))
-      ),
-      R.T
+      R.isEmpty,
+      R.F,
+      R.ifElse(
+        startsWith('..'),
+        R.both(R.always(isParentIndefinite), isSiblingFolder),
+        R.T
+      )
     ),
-    R.F
-  ),
-  path.relative
-)(parentPath, childPath))
+    path.relative
+  )
+  
+  return compareFolders(parentPath, childPath)
+})
 
 const isChildFolder = R.flip(isParentFolder)
 
 const appendDoubleStars = R.when(
-  R.complement(endsWith(path.sep + '**')),
+  R.complement(isIndefiniteFolder),
   R.converge(R.concat, [
     R.identity,
     R.compose(
       R.concat(R.__, '**'),
-      R.ifElse(endsWith(path.sep, R.__), R.always(''), R.always(path.sep))
+      R.ifElse(
+        endsWith(path.sep),
+        R.always(''),
+        R.always(path.sep)
+      )
     )
   ])
 )
@@ -49,7 +58,6 @@ const globifyFolders = R.map(appendDoubleStars)
 
 const mergeWatchedFolders = R.curry(filenames => {
   const uniqFolders = getUniqueFolders(filenames)
-  
   return R.reject(R.compose(R.any(R.__, uniqFolders), isChildFolder), uniqFolders)
 })
 
