@@ -15,20 +15,20 @@ const getUniqueFolders = R.compose(
   R.flatten
 )
 
+const ANY_FOLDER = R.always('**')
+
 const isSiblingFolder = R.compose(R.not, R.propEq(1, '..'), R.split(path.sep))
-const isIndefiniteFolder = endsWith('**')
+const isIndefiniteFolder = endsWith(ANY_FOLDER())
 
 const isParentFolder = R.curry((parentPath, childPath) => {
-  const isParentIndefinite = isIndefiniteFolder(parentPath)
+  const isParentIndefinite = R.always(isIndefiniteFolder(parentPath))
   
   const compareFolders = R.compose(
-    R.ifElse(
-      R.isEmpty,
-      R.F,
-      R.ifElse(
-        startsWith('..'),
-        R.both(R.always(isParentIndefinite), isSiblingFolder),
-        R.T
+    R.both(
+      R.complement(R.isEmpty),
+      R.either(
+        R.complement(startsWith('..')),
+        R.both(isParentIndefinite, isSiblingFolder)
       )
     ),
     path.relative
@@ -39,17 +39,14 @@ const isParentFolder = R.curry((parentPath, childPath) => {
 
 const isChildFolder = R.flip(isParentFolder)
 
-const appendDoubleStars = R.when(
-  R.complement(isIndefiniteFolder),
+const appendDoubleStars = R.unless(
+  isIndefiniteFolder,
   R.converge(R.concat, [
     R.identity,
-    R.compose(
-      R.concat(R.__, '**'),
-      R.ifElse(
-        endsWith(path.sep),
-        R.always(''),
-        R.always(path.sep)
-      )
+    R.ifElse(
+      endsWith(path.sep),
+      ANY_FOLDER,
+      R.compose(R.concat(path.sep), ANY_FOLDER)
     )
   ])
 )
