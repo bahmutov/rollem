@@ -14,7 +14,8 @@ function buildBundle (config) {
         dest: config.dest,
         globals: config.globals,
         moduleName: config.moduleName,
-        sourceMap: config.sourceMap
+        sourceMap: config.sourceMap,
+        interop: config.interop
       }).then(() => config.dest)
     })
 }
