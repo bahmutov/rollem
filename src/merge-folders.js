@@ -62,13 +62,20 @@ const removeChildFolders = R.converge(R.reject, [
   R.identity
 ])
 
-const mergeWatchedFolders = R.compose(removeChildFolders, getUniqueFolders)
+const mergeFolders = R.compose(removeChildFolders, getUniqueFolders)
 
 module.exports = {
-  appendDoubleStars: appendDoubleStars,
-  globify: globifyFolders,
-  normalizeGlob: normalizeGlob,
-  isParentFolder: isParentFolder,
-  isChildFolder: isChildFolder,
-  merge: mergeWatchedFolders
+  endsWith,
+  startsWith,
+  normalizeGlob,
+  getUniqueFolders,
+  ANY_FOLDER,
+  isSiblingFolder,
+  isIndefiniteFolder,
+  isParentFolder,
+  isChildFolder,
+  appendDoubleStars,
+  globifyFolders,
+  removeChildFolders,
+  mergeFolders
 }

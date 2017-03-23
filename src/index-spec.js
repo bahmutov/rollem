@@ -2,8 +2,7 @@
 
 const la = require('lazy-ass')
 const is = require('check-more-types')
-const R = require('ramda')
-const equals = R.equals
+const {equals} = require('ramda')
 const path = require('path')
 
 /* global describe, it */
@@ -20,46 +19,46 @@ describe('rollem', () => {
 })
 
 describe('merge folders', () => {
-  const merge = require('./merge-folders').merge
+  const mergeFolders = require('./merge-folders').mergeFolders
   
   it('gives back only the folders', () => {
     const files = ['foo/bar.js']
-    const merged = merge(files)
+    const merged = mergeFolders(files)
     la(equals(merged, ['foo']), merged)
   })
   
   it('removes duplicates', () => {
     const files = ['foo/bar.js', 'foo/bar.js']
-    const merged = merge(files)
+    const merged = mergeFolders(files)
     la(equals(merged, ['foo']), merged)
   })
   
   it('normalizes paths', () => {
     const files = ['foo/../foo/bar.js']
-    const merged = merge(files)
+    const merged = mergeFolders(files)
     la(equals(merged, ['foo']), merged)
   })
   
   it('removes child folders', () => {
     const files = ['foo/bar.js', 'foo/child/baz.js']
-    const merged = merge(files)
+    const merged = mergeFolders(files)
     la(equals(merged, ['foo']), merged)
   })
   
   it('flattens array folder definitions', () => {
     const files = ['foo/x/a.js', ['foo/y/b.js', 'foo/z/c.js']]
-    const merged = merge(files)
+    const merged = mergeFolders(files)
     la(equals(merged, [path.normalize('foo/x'), path.normalize('foo/y'), path.normalize('foo/z')]), merged)
   })
   
   it('can deal with glob patterns', () => {
     const files = ['foo/**/bar.js']
-    const merged = merge(files)
+    const merged = mergeFolders(files)
     la(equals(merged, [path.normalize('foo/**')]), merged)
   })
   
   describe('folder globifier', () => {
-    // const globify = require('./merge-folders').globify
+    // const globifyFolders = require('./merge-folders').globifyFolders
     const appendDoubleStars = require('./merge-folders').appendDoubleStars
     
     it('appends ** at the end of folders, if necessary', () => {
