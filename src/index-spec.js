@@ -60,17 +60,14 @@ describe('./merge-folders', () => {
   })
   
   describe('normalizeGlob', () => {
-    it('is a function', () => {
-      assert.ok(isFunction(normalizeGlob), 'should be a function')
-    })
     it('collapses consecutive **/ patterns', () => {
-      assert.equal(normalizeGlob('foo/**/**/**/bar'), 'foo/**/bar')
+      assert.equal(normalizeGlob('foo/**/**/**/bar'), 'foo/**/bar', '"foo/**/**/**/bar" should be transformed to "foo/**/bar"')
     })
     it('keeps the directory separators intact', () => {
-      assert.equal(normalizeGlob('foo\\**\\**\\bar'), 'foo\\**\\bar')
+      assert.equal(normalizeGlob('foo\\**\\**\\bar'), 'foo\\**\\bar', '"foo\\**\\**\\bar" should be transformed to "foo\\**\\bar"')
     })
     it('keeps intermediate folders between ** patterns intact', () => {
-      assert.equal(normalizeGlob('foo/**/**/bar/**/**/**/baz'), 'foo/**/bar/**/baz')
+      assert.equal(normalizeGlob('foo/**/**/bar/**/**/**/baz'), 'foo/**/bar/**/baz', '"foo/**/**/bar/**/**/**/baz" should be transformed to "foo/**/bar/**/baz"')
     })
   })
   
@@ -84,16 +81,29 @@ describe('./merge-folders', () => {
     })
     it('always returns "**"', () => {
       assert.equal(ANY_FOLDER(), '**', 'should return "**" when no parameters are passed')
-      assert.equal(ANY_FOLDER('asdf'), ANY_FOLDER(12, true, 4), 'should give back the same value regardless of the amount and quality of arguments')
+      assert.equal(ANY_FOLDER('asdf'), ANY_FOLDER(12, true, 4), 'should give back the same value regardless of the amount or value of arguments')
     })
   })
   
   describe('isSiblingFolder', () => {
-    
+    it('checks a relative path whether it only steps 1 folder up the folder tree', () => {
+      var path1 = path.normalize('../foo/bar')
+      assert.ok(isSiblingFolder(path1), '"' + path1 + '" is considered a sibling folder')
+      
+      var path2 = path.normalize('../../../foo/bar/')
+      assert.ok(!isSiblingFolder(path2), '"' + path2 + '" is not a sibling folder')
+    })
   })
   
   describe('isIndefiniteFolder', () => {
-    
+    it('checks, if a path ends with **', () => {
+      assert.ok(isIndefiniteFolder('../foo/bar/**'), '"../foo/bar/**" is indefinite')
+      assert.ok(isIndefiniteFolder('/a/**'), '"/a/**" is indefinite')
+      assert.ok(isIndefiniteFolder('**'), '"**" is indefinite')
+      assert.ok(isIndefiniteFolder('./**'), '"./**" is indefinite')
+      assert.ok(!isIndefiniteFolder('../a/b'), '"../a/b" is not indefinite')
+      assert.ok(!isIndefiniteFolder('/test'), '"/test" is not indefinite')
+    })
   })
   
   describe('isParentFolder', () => {

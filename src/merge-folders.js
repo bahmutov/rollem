@@ -6,7 +6,6 @@ const path = require('path')
 const endsWith = R.curry((ending, str) => str.endsWith(ending))
 const startsWith = R.curry((starting, str) => str.startsWith(starting))
 
-// collapses multiple sequential '**/' parts into a single '**/'
 const normalizeGlob = R.replace(/\*\*([\\/])(?:\*\*[\\/])+/g, '**$1')
 
 const getUniqueFolders = R.compose(
