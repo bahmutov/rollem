@@ -73,10 +73,8 @@
   },
   "devDependencies": {
     "ban-sensitive-files": "1.8.3",
-    "check-more-types": "2.21.0",
     "deps-ok": "1.1.0",
     "git-issues": "1.2.0",
-    "lazy-ass": "1.4.0",
     "license-checker": "5.1.2",
     "mocha": "2.5.3",
     "nsp": "2.4.0",

@@ -8,21 +8,23 @@ const globifyFolders = require('./merge-folders').globifyFolders
 
 function buildBundle (config) {
   return rollup.rollup(config)
-    .then(function (bundle) {
-      return bundle.write({
-        format: config.format || 'es',
-        dest: config.dest,
-        globals: config.globals,
-        moduleName: config.moduleName,
-        sourceMap: config.sourceMap
-      }).then(() => config.dest)
+    .then(bundle => {
+      return bundle
+        .write({
+          format: config.format || 'es',
+          dest: config.dest,
+          globals: config.globals,
+          moduleName: config.moduleName,
+          sourceMap: config.sourceMap
+        })
+        .then(() => config.dest)
     })
 }
 
 function buildBundles (configs) {
   const promises = configs.map(buildBundle)
   return Promise.all(promises)
-    .then((bundles) => {
+    .then(bundles => {
       console.log('[%s] built %d bundles', new Date().toTimeString(), configs.length)
       debug(bundles)
       return bundles
