@@ -3,6 +3,7 @@ const assert = require('assert')
 
 const isFunction = x => typeof x === 'function'
 
+/* global describe, it */
 describe('./merge-folders', () => {
   const {
     endsWith,
