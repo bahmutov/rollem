@@ -8,7 +8,7 @@ describe('rollem', () => {
   it('is a function', () => {
     assert.ok(isFunction(rollem), 'should be a function')
   })
-  
+
   /*
   it('handles undefined options', () => {
     return rollem([])

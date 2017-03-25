@@ -20,7 +20,7 @@ describe('./merge-folders', () => {
     removeChildFolders,
     mergeFolders
   } = require('./merge-folders')
-  
+
   describe('endsWith', () => {
     it('checks the ends of strings', () => {
       assert.ok(endsWith('ipsum', 'lorem ipsum'), '"lorem ipsum" ends with "ipsum"')
@@ -32,7 +32,7 @@ describe('./merge-folders', () => {
       assert.equal(endsWith(what, str), endsWith(what)(str), 'endsWith(..., ...) should be the same as endsWith(...)(...)')
     })
   })
-  
+
   describe('startsWith', () => {
     it('checks the beginnings of strings', () => {
       assert.ok(startsWith('lorem', 'lorem ipsum'), '"lorem ipsum" starts with "lorem"')
@@ -44,7 +44,7 @@ describe('./merge-folders', () => {
       assert.equal(startsWith(what, str), startsWith(what)(str), 'startsWith(..., ...) should be the same as startsWith(...)(...)')
     })
   })
-  
+
   describe('normalizeGlob', () => {
     it('collapses consecutive **/ patterns', () => {
       assert.equal(normalizeGlob('foo/**/**/**/bar'), 'foo/**/bar')
@@ -56,7 +56,7 @@ describe('./merge-folders', () => {
       assert.equal(normalizeGlob('foo/**/**/bar/**/**/**/baz'), 'foo/**/bar/**/baz')
     })
   })
-  
+
   describe('getUniqueFolders', () => {
     it('takes an array of paths and trims off filenames from the ends', () => {
       assert.deepEqual(
@@ -66,7 +66,7 @@ describe('./merge-folders', () => {
     })
     it('normalizes paths', () => {
       assert.deepEqual(
-        getUniqueFolders(['a/../b/././**/c/foo.png'])
+        getUniqueFolders(['a/../b/././**/c/foo.png']),
         [path.normalize('b/**/c')]
       )
     })
@@ -83,7 +83,7 @@ describe('./merge-folders', () => {
       )
     })
   })
-  
+
   describe('ANY_FOLDER', () => {
     it('is a function', () => {
       assert.ok(isFunction(ANY_FOLDER), 'should be a function')
@@ -93,17 +93,16 @@ describe('./merge-folders', () => {
       assert.equal(ANY_FOLDER('asdf'), ANY_FOLDER(12, true, 4), 'should give back the same value regardless of the amount and quality of arguments')
     })
   })
-  
+
   describe('isSiblingFolder', () => {
     it('checks a relative path whether it only steps 1 folder up the folder tree', () => {
-      var path1 = path.normalize('../foo/bar')
+      const path1 = path.normalize('../foo/bar')
       assert.ok(isSiblingFolder(path1), '"' + path1 + '" is considered a sibling folder')
-      
-      var path2 = path.normalize('../../../foo/bar/')
+      const path2 = path.normalize('../../../foo/bar/')
       assert.ok(!isSiblingFolder(path2), '"' + path2 + '" is not a sibling folder')
     })
   })
-  
+
   describe('isIndefiniteFolder', () => {
     it('checks, if a path ends with **', () => {
       assert.ok(isIndefiniteFolder('../foo/bar/**'), '"../foo/bar/**" is indefinite')
@@ -114,7 +113,7 @@ describe('./merge-folders', () => {
       assert.ok(!isIndefiniteFolder('/test'), '"/test" is not indefinite')
     })
   })
-  
+
   describe('isParentFolder', () => {
     it('compares 2 paths and checks if the second path defines a subfolder inside the first', () => {
       assert.ok(isParentFolder('foo', 'foo/bar'))
@@ -133,7 +132,7 @@ describe('./merge-folders', () => {
       assert.equal(isParentFolder('foo/bar', 'foo/bar/baz'), isParentFolder('foo/bar')('foo/bar/baz'))
     })
   })
-  
+
   describe('isChildFolder', () => {
     it('is the same as isParentFolder, but with reversed parameters', () => {
       const folder1A = 'foo/bar/baz'
@@ -144,7 +143,7 @@ describe('./merge-folders', () => {
       assert.strictEqual(isChildFolder(folder2A, folder2B), isParentFolder(folder2B, folder2A))
     })
   })
-  
+
   describe('appendDoubleStars', () => {
     it('appends ** at the end of folders, if necessary', () => {
       assert.equal(appendDoubleStars(path.normalize('foo/bar')), path.normalize('foo/bar/**'))
@@ -154,7 +153,7 @@ describe('./merge-folders', () => {
       assert.equal(appendDoubleStars(path.normalize('foo/**/bar/**')), path.normalize('foo/**/bar/**'))
     })
   })
-  
+
   describe('globifyFolders', () => {
     it('takes an array of folders and appends ** at their ends', () => {
       assert.deepEqual(
@@ -163,7 +162,7 @@ describe('./merge-folders', () => {
       )
     })
   })
-  
+
   describe('removeChildFolders', () => {
     it('takes an array of paths and removes child folders', () => {
       assert.deepEqual(
@@ -172,7 +171,7 @@ describe('./merge-folders', () => {
       )
     })
   })
-  
+
   describe('mergeFolders', () => {
     it('from an array of paths it filters out non-unique and child folders', () => {
       assert.deepEqual(

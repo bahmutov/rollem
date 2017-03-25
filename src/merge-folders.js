@@ -21,7 +21,7 @@ const isIndefiniteFolder = endsWith(ANY_FOLDER())
 
 const isParentFolder = R.curry((parentPath, childPath) => {
   const isParentIndefinite = R.always(isIndefiniteFolder(parentPath))
-  
+
   const compareFolders = R.compose(
     R.both(
       R.complement(R.isEmpty),
@@ -32,7 +32,7 @@ const isParentFolder = R.curry((parentPath, childPath) => {
     ),
     path.relative
   )
-  
+
   return compareFolders(parentPath, childPath)
 })
 
