@@ -72,6 +72,7 @@
     "e2e": "npm run test-default-es5 && npm run test-specified-es5 && npm run test-es6 && npm run test-plugins && npm run test-multi-entry"
   },
   "devDependencies": {
+    "assert": "1.4.1",
     "ban-sensitive-files": "1.8.3",
     "deps-ok": "1.1.0",
     "git-issues": "1.2.0",
@@ -79,8 +80,8 @@
     "mocha": "2.5.3",
     "nsp": "2.4.0",
     "pre-git": "3.9.0",
-    "rollup-plugin-node-resolve": "2.0.0",
     "rollup-plugin-multi-entry": "^2.0.1",
+    "rollup-plugin-node-resolve": "2.0.0",
     "semantic-release": "^4.3.5",
     "standard": "7.1.2",
     "standard-format": "2.2.1",
