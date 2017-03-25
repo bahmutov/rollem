@@ -13,12 +13,12 @@ describe('./merge-folders', () => {
     ANY_FOLDER,
     isSiblingFolder,
     isIndefiniteFolder,
-    isParentFolder,
-    isChildFolder,
+    // isParentFolder,
+    // isChildFolder,
     appendDoubleStars,
     globifyFolders,
-    removeChildFolders,
-    mergeFolders
+    // removeChildFolders,
+    // mergeFolders
   } = require('./merge-folders')
   
   describe('endsWith', () => {
@@ -58,7 +58,30 @@ describe('./merge-folders', () => {
   })
   
   describe('getUniqueFolders', () => {
-    
+    it('takes an array of paths and trims off filenames from the ends', () => {
+      assert.deepEqual(
+        getUniqueFolders(['a/b.jpg', 'c/d/e.txt', 'etc/init.d', '../hosts']),
+        ['a', path.normalize('c/d'), 'etc', '..']
+      )
+    })
+    it('normalizes paths', () => {
+      assert.deepEqual(
+        getUniqueFolders(['a/../b/././**/c/foo.png'])
+        [path.normalize('b/**/c')]
+      )
+    })
+    it('removes duplicates', () => {
+      assert.deepEqual(
+        getUniqueFolders(['foo/./bar/a.js', 'foo/bar/b.js', 'foo/baz/../bar/c.js']),
+        [path.normalize('foo/bar')]
+      )
+    })
+    it('flattens nested arrays', () => {
+      assert.deepEqual(
+        getUniqueFolders([[['foo/bar/baz.js']], 'a/b.txt', ['c/d/e.jpg']]),
+        [path.normalize('foo/bar'), 'a', path.normalize('c/d')]
+      )
+    })
   })
   
   describe('ANY_FOLDER', () => {
