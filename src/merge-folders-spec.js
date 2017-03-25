@@ -13,12 +13,12 @@ describe('./merge-folders', () => {
     ANY_FOLDER,
     isSiblingFolder,
     isIndefiniteFolder,
-    // isParentFolder,
-    // isChildFolder,
+    isParentFolder,
+    isChildFolder,
     appendDoubleStars,
     globifyFolders,
-    // removeChildFolders,
-    // mergeFolders
+    removeChildFolders,
+    mergeFolders
   } = require('./merge-folders')
   
   describe('endsWith', () => {
@@ -116,11 +116,33 @@ describe('./merge-folders', () => {
   })
   
   describe('isParentFolder', () => {
-    
+    it('compares 2 paths and checks if the second path defines a subfolder inside the first', () => {
+      assert.ok(isParentFolder('foo', 'foo/bar'))
+      assert.ok(isParentFolder('foo', 'foo/bar/baz'))
+      assert.ok(!isParentFolder('foo/bar/baz', 'foo/bar/foo'))
+      assert.ok(!isParentFolder('foo/bar/baz', 'foo/bar/baz'))
+      assert.ok(!isParentFolder('foo/bar', 'baz'))
+    })
+    it('chooses ** over any other folders', () => {
+      assert.ok(isParentFolder('foo/**', 'foo/bar'))
+      assert.ok(isParentFolder('foo/**', 'foo/bar/baz'))
+      assert.ok(!isParentFolder('foo/**/x', 'foo/bar'))
+      assert.ok(!isParentFolder('foo/x/**', 'foo/bar'))
+    })
+    it('can be curried', () => {
+      assert.equal(isParentFolder('foo/bar', 'foo/bar/baz'), isParentFolder('foo/bar')('foo/bar/baz'))
+    })
   })
   
   describe('isChildFolder', () => {
-    
+    it('is the same as isParentFolder, but with reversed parameters', () => {
+      const folder1A = 'foo/bar/baz'
+      const folder1B = 'foo/bar'
+      assert.strictEqual(isChildFolder(folder1A, folder1B), isParentFolder(folder1B, folder1A))
+      const folder2A = 'foo/bar'
+      const folder2B = 'foo/**'
+      assert.strictEqual(isChildFolder(folder2A, folder2B), isParentFolder(folder2B, folder2A))
+    })
   })
   
   describe('appendDoubleStars', () => {
@@ -143,99 +165,20 @@ describe('./merge-folders', () => {
   })
   
   describe('removeChildFolders', () => {
-    
+    it('takes an array of paths and removes child folders', () => {
+      assert.deepEqual(
+        removeChildFolders(['foo/bar', 'foo/**', 'foo/bar/baz']),
+        ['foo/**']
+      )
+    })
   })
   
   describe('mergeFolders', () => {
-    
+    it('from an array of paths it filters out non-unique and child folders', () => {
+      assert.deepEqual(
+        mergeFolders(['foo/bar/baz.js', ['foo/bar/x.png', 'foo/**/*.js', 'foo/**/*.ts'], 'foo\\**\\bar\\baz\\..\\*.js']),
+        [path.normalize('foo/**')]
+      )
+    })
   })
 })
-
-// -------------
-
-// describe('merge folders', () => {
-  // it('gives back only the folders', () => {
-    // const files = ['foo/bar.js']
-    // const merged = mergeFolders(files)
-    // la(equals(merged, ['foo']), merged)
-  // })
-  
-  // it('removes duplicates', () => {
-    // const files = ['foo/bar.js', 'foo/bar.js']
-    // const merged = mergeFolders(files)
-    // la(equals(merged, ['foo']), merged)
-  // })
-  
-  // it('normalizes paths', () => {
-    // const files = ['foo/../foo/bar.js']
-    // const merged = mergeFolders(files)
-    // la(equals(merged, ['foo']), merged)
-  // })
-  
-  // it('removes child folders', () => {
-    // const files = ['foo/bar.js', 'foo/child/baz.js']
-    // const merged = mergeFolders(files)
-    // la(equals(merged, ['foo']), merged)
-  // })
-  
-  // it('flattens array folder definitions', () => {
-    // const files = ['foo/x/a.js', ['foo/y/b.js', 'foo/z/c.js']]
-    // const merged = mergeFolders(files)
-    // la(equals(merged, [path.normalize('foo/x'), path.normalize('foo/y'), path.normalize('foo/z')]), merged)
-  // })
-  
-  // it('can deal with glob patterns', () => {
-    // const files = ['foo/**/bar.js']
-    // const merged = mergeFolders(files)
-    // la(equals(merged, [path.normalize('foo/**')]), merged)
-  // })
-  
-  // describe('child folder', () => {
-    // it('checks if one string starts with another', () => {
-      // const a = '../../foo'
-      // const b = '../..'
-      // la(a.startsWith(b))
-    // })
-
-    // it('finds that it is child', () => {
-      // const c = 'foo/child'
-      // const p = 'foo'
-      // la(isChildFolder(c, p), path.relative(p, c))
-    // })
-
-    // it('finds that it is child 2', () => {
-      // const c = 'foo/bar/child'
-      // const p = 'foo'
-      // la(isChildFolder(c, p), path.relative(p, c))
-    // })
-
-    // it('does not find child', () => {
-      // const c = 'bar/child'
-      // const p = 'foo'
-      // la(!isChildFolder(c, p), path.relative(p, c))
-    // })
-
-    // it('does not consider folder a child of itself', () => {
-      // const folder = 'foo/bar'
-      // la(!isChildFolder(folder, folder))
-    // })
-    
-    // it('takes ** as the parent among other folders, if it\'s on the end and compared folders have the same depth', () => {
-      // const p1 = 'foo/**'
-      // const c1 = 'foo/bar'
-      // la(isChildFolder(c1, p1), 'test1: parent=' + path.normalize(p1) + '; child=' + path.normalize(c1) + ' >> ' + path.relative(p1, c1))
-      
-      // const p2 = 'foo/**/x'
-      // const c2 = 'foo/bar'
-      // la(!isChildFolder(c2, p2), 'test2: parent=' + path.normalize(p2) + '; child=' + path.normalize(c2) + ' >> ' + path.relative(p2, c2))
-      
-      // const p3 = 'foo/x/**'
-      // const c3 = 'foo/bar'
-      // la(!isChildFolder(c3, p3), 'test3: parent=' + path.normalize(p3) + '; child=' + path.normalize(c3) + ' >> ' + path.relative(p3, c3))
-      
-      // const p4 = 'foo/**'
-      // const c4 = 'foo/bar/baz'
-      // la(isChildFolder(c4, p4), 'test4: parent=' + path.normalize(p4) + '; child=' + path.normalize(c4) + ' >> ' + path.relative(p4, c4))
-    // })
-  // })
-// })
