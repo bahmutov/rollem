@@ -7,19 +7,17 @@ const mergeFolders = require('./merge-folders').mergeFolders
 const globifyFolders = require('./merge-folders').globifyFolders
 
 function buildBundle (config) {
-  return rollup.rollup(config)
-    .then(bundle => {
-      return bundle
-        .write({
-          format: config.format || 'es',
-          dest: config.dest,
-          globals: config.globals,
-          moduleName: config.moduleName,
-          sourceMap: config.sourceMap,
-          interop: config.interop
-        })
-        .then(() => config.dest)
-    })
+  return rollup
+    .rollup(config)
+    .then(bundle => bundle.write({
+      format: config.format || 'es',
+      dest: config.dest,
+      globals: config.globals,
+      moduleName: config.moduleName,
+      sourceMap: config.sourceMap,
+      interop: config.interop
+    }))
+    .then(() => config.dest)
 }
 
 function buildBundles (configs) {
