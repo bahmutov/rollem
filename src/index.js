@@ -55,6 +55,9 @@ function rollem (configs, options) {
     const watcher = new EventEmitter()
 
     gaze(folders, (err, gazeWatcher) => {
+      if (err) {
+        watcher.emit('failed', err)
+      }
       gazeWatcher.on('all', () => {
         watcher.emit('changed')
         buildBundles(configs).then(() => watcher.emit('rolled'))
