@@ -3,27 +3,27 @@
 const debug = require('debug')('rollem')
 const rollup = require('rollup')
 const R = require('ramda')
-const mergeFolders = require('./merge-folders').merge
-const globifyFolders = require('./merge-folders').globify
+const mergeFolders = require('./merge-folders').mergeFolders
+const globifyFolders = require('./merge-folders').globifyFolders
 
 function buildBundle (config) {
-  return rollup.rollup(config)
-    .then(function (bundle) {
-      return bundle.write({
-        format: config.format || 'es',
-        dest: config.dest,
-        globals: config.globals,
-        moduleName: config.moduleName,
-        sourceMap: config.sourceMap,
-        interop: config.interop
-      }).then(() => config.dest)
-    })
+  return rollup
+    .rollup(config)
+    .then(bundle => bundle.write({
+      format: config.format || 'es',
+      dest: config.dest,
+      globals: config.globals,
+      moduleName: config.moduleName,
+      sourceMap: config.sourceMap,
+      interop: config.interop
+    }))
+    .then(() => config.dest)
 }
 
 function buildBundles (configs) {
   const promises = configs.map(buildBundle)
   return Promise.all(promises)
-    .then((bundles) => {
+    .then(bundles => {
       console.log('[%s] built %d bundles', new Date().toTimeString(), configs.length)
       debug(bundles)
       return bundles
@@ -50,16 +50,20 @@ function rollem (configs, options) {
     const folders = collectInputFolders(configs)
     console.log('[%s] watching source folders for changes', new Date().toTimeString(), folders)
 
-    const watchGlob = require('watch-glob')
+    const gaze = require('gaze')
     const EventEmitter = require('events')
     const watcher = new EventEmitter()
-    
-    watchGlob(folders, {callbackArg: 'relative'}, () => {
+
+    gaze(folders, (err, gazeWatcher) => {
+      if (err) {
+        watcher.emit('failed', err)
+      }
+      gazeWatcher.on('all', () => {
         watcher.emit('changed')
-        buildBundles(configs)
-          .then(() => watcher.emit('rolled'))
+        buildBundles(configs).then(() => watcher.emit('rolled'))
+      })
     })
-    
+
     return Promise.resolve(watcher)
   } else {
     return buildBundles(configs)
