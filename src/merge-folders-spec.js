@@ -173,9 +173,9 @@ describe('./merge-folders', () => {
   })
 
   describe('mergeFolders', () => {
-    it('from an array of paths it filters out non-unique and child folders', () => {
+    it('filters out non-unique and child folders from an array of paths', () => {
       assert.deepEqual(
-        mergeFolders(['foo/bar/baz.js', ['foo/bar/x.png', 'foo/**/*.js', 'foo/**/*.ts'], 'foo\\**\\bar\\baz\\..\\*.js']),
+        mergeFolders(['foo/bar/baz.js', ['foo/bar/x.png', 'foo/**/*.js', 'foo/**/*.ts'], 'foo/**/bar/baz/../*.js']),
         [path.normalize('foo/**')]
       )
     })
