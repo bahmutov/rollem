@@ -50,14 +50,19 @@ function rollem (configs, options) {
     const folders = collectInputFolders(configs)
     console.log('[%s] watching source folders for changes', new Date().toTimeString(), folders)
 
-    const watchGlob = require('watch-glob')
+    const gaze = require('gaze')
     const EventEmitter = require('events')
     const watcher = new EventEmitter()
     
-    watchGlob(folders, {callbackArg: 'relative'}, () => {
-        watcher.emit('changed')
-        buildBundles(configs)
-          .then(() => watcher.emit('rolled'))
+    gaze(folders, (err, gazeWatcher) => {
+      if (err) {
+        watcher.emit('failed', err)
+      } else {
+        gazeWatcher.on('all', () => {
+          watcher.emit('changed')
+          buildBundles(configs).then(() => watcher.emit('rolled'))
+        })
+      }
     })
     
     return Promise.resolve(watcher)
