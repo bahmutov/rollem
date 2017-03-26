@@ -60,7 +60,7 @@
     "lint": "standard --verbose bin/*.js src/*.js",
     "pretest": "npm run format && npm run lint",
     "secure": "nsp check",
-    "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
+    "size": "size",
     "test": "npm run unit",
     "unit": "mocha src/*-spec.js",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
