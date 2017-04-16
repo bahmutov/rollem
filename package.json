@@ -54,7 +54,7 @@
   "scripts": {
     "ban": "ban",
     "deps": "deps-ok",
-    "format": "standard --fix -w bin/*.js src/*.js",
+    "format": "standard --verbose --fix -w bin/*.js src/*.js",
     "issues": "git-issues",
     "license": "license-checker --production --onlyunknown --csv",
     "lint": "standard --verbose bin/*.js src/*.js",
