@@ -6,6 +6,15 @@ const R = require('ramda')
 const equals = R.equals
 const path = require('path')
 
+const {
+  appendDoubleStars,
+  globifyFolders,
+  isChildFolder,
+  isParentFolder,
+  mergeFolders,
+  normalizeGlob
+} = require('./merge-folders')
+
 /* global describe, it */
 describe('rollem', () => {
   const rollem = require('.')
@@ -20,48 +29,43 @@ describe('rollem', () => {
 })
 
 describe('merge folders', () => {
-  const merge = require('./merge-folders').merge
-  
   it('gives back only the folders', () => {
     const files = ['foo/bar.js']
-    const merged = merge(files)
+    const merged = mergeFolders(files)
     la(equals(merged, ['foo']), merged)
   })
   
   it('removes duplicates', () => {
     const files = ['foo/bar.js', 'foo/bar.js']
-    const merged = merge(files)
+    const merged = mergeFolders(files)
     la(equals(merged, ['foo']), merged)
   })
   
   it('normalizes paths', () => {
     const files = ['foo/../foo/bar.js']
-    const merged = merge(files)
+    const merged = mergeFolders(files)
     la(equals(merged, ['foo']), merged)
   })
   
   it('removes child folders', () => {
     const files = ['foo/bar.js', 'foo/child/baz.js']
-    const merged = merge(files)
+    const merged = mergeFolders(files)
     la(equals(merged, ['foo']), merged)
   })
   
   it('flattens array folder definitions', () => {
     const files = ['foo/x/a.js', ['foo/y/b.js', 'foo/z/c.js']]
-    const merged = merge(files)
+    const merged = mergeFolders(files)
     la(equals(merged, [path.normalize('foo/x'), path.normalize('foo/y'), path.normalize('foo/z')]), merged)
   })
   
   it('can deal with glob patterns', () => {
     const files = ['foo/**/bar.js']
-    const merged = merge(files)
+    const merged = mergeFolders(files)
     la(equals(merged, [path.normalize('foo/**')]), merged)
   })
   
   describe('folder globifier', () => {
-    // const globify = require('./merge-folders').globify
-    const appendDoubleStars = require('./merge-folders').appendDoubleStars
-    
     it('appends ** at the end of folders, if necessary', () => {
       const file1 = path.normalize('foo/bar')
       const globbed1 = appendDoubleStars(file1)
@@ -78,8 +82,6 @@ describe('merge folders', () => {
   })
   
   describe('glob normalization', () => {
-    const normalizeGlob = require('./merge-folders').normalizeGlob
-    
     it('collapses sequential and unnecessary **/ paths while keeping the directory separator intact', () => {
       const folder1 = 'foo/**/**/**/bar'
       const cleanedFolder1 = normalizeGlob(folder1)
@@ -96,8 +98,6 @@ describe('merge folders', () => {
   })
   
   describe('child folder', () => {
-    const isChild = require('./merge-folders').isChildFolder
-
     it('checks if one string starts with another', () => {
       const a = '../../foo'
       const b = '../..'
@@ -107,42 +107,42 @@ describe('merge folders', () => {
     it('finds that it is child', () => {
       const c = 'foo/child'
       const p = 'foo'
-      la(isChild(c, p), path.relative(p, c))
+      la(isChildFolder(c, p), path.relative(p, c))
     })
 
     it('finds that it is child 2', () => {
       const c = 'foo/bar/child'
       const p = 'foo'
-      la(isChild(c, p), path.relative(p, c))
+      la(isChildFolder(c, p), path.relative(p, c))
     })
 
     it('does not find child', () => {
       const c = 'bar/child'
       const p = 'foo'
-      la(!isChild(c, p), path.relative(p, c))
+      la(!isChildFolder(c, p), path.relative(p, c))
     })
 
     it('does not consider folder a child of itself', () => {
       const folder = 'foo/bar'
-      la(!isChild(folder, folder))
+      la(!isChildFolder(folder, folder))
     })
     
     it('takes ** as the parent among other folders, if it\'s on the end and compared folders have the same depth', () => {
       const p1 = 'foo/**'
       const c1 = 'foo/bar'
-      la(isChild(c1, p1), 'test1: parent=' + path.normalize(p1) + '; child=' + path.normalize(c1) + ' >> ' + path.relative(p1, c1))
+      la(isChildFolder(c1, p1), 'test1: parent=' + path.normalize(p1) + '; child=' + path.normalize(c1) + ' >> ' + path.relative(p1, c1))
       
       const p2 = 'foo/**/x'
       const c2 = 'foo/bar'
-      la(!isChild(c2, p2), 'test2: parent=' + path.normalize(p2) + '; child=' + path.normalize(c2) + ' >> ' + path.relative(p2, c2))
+      la(!isChildFolder(c2, p2), 'test2: parent=' + path.normalize(p2) + '; child=' + path.normalize(c2) + ' >> ' + path.relative(p2, c2))
       
       const p3 = 'foo/x/**'
       const c3 = 'foo/bar'
-      la(!isChild(c3, p3), 'test3: parent=' + path.normalize(p3) + '; child=' + path.normalize(c3) + ' >> ' + path.relative(p3, c3))
+      la(!isChildFolder(c3, p3), 'test3: parent=' + path.normalize(p3) + '; child=' + path.normalize(c3) + ' >> ' + path.relative(p3, c3))
       
       const p4 = 'foo/**'
       const c4 = 'foo/bar/baz'
-      la(isChild(c4, p4), 'test4: parent=' + path.normalize(p4) + '; child=' + path.normalize(c4) + ' >> ' + path.relative(p4, c4))
+      la(isChildFolder(c4, p4), 'test4: parent=' + path.normalize(p4) + '; child=' + path.normalize(c4) + ' >> ' + path.relative(p4, c4))
     })
   })
 })

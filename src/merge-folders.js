@@ -42,7 +42,7 @@ function globifyFolders (folders) {
   return R.map(appendDoubleStars, folders)
 }
 
-function mergeWatchedFolders (filenames) {
+function mergeFolders (filenames) {
   const flattedFilenames = R.flatten(filenames);
   const cleanedFolders = R.map(R.compose(normalizeGlob, path.normalize, path.dirname), flattedFilenames)
   const uniqFolders = R.uniq(cleanedFolders)
@@ -52,10 +52,10 @@ function mergeWatchedFolders (filenames) {
 }
 
 module.exports = {
-  appendDoubleStars: appendDoubleStars,
-  globify: globifyFolders,
-  normalizeGlob: normalizeGlob,
-  isParentFolder: isParentFolder,
-  isChildFolder: isChildFolder,
-  merge: mergeWatchedFolders
+  appendDoubleStars,
+  globifyFolders,
+  isChildFolder,
+  isParentFolder,
+  mergeFolders,
+  normalizeGlob
 }

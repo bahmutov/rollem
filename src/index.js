@@ -3,8 +3,11 @@
 const debug = require('debug')('rollem')
 const rollup = require('rollup')
 const R = require('ramda')
-const mergeFolders = require('./merge-folders').merge
-const globifyFolders = require('./merge-folders').globify
+
+const {
+  mergeFolders,
+  globifyFolders
+} = require('./merge-folders')
 
 function buildBundle (config) {
   return rollup.rollup(config)
