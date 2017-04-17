@@ -54,7 +54,7 @@
   "scripts": {
     "ban": "ban",
     "deps": "deps-ok",
-    "format": "standard-format -w bin/*.js src/*.js",
+    "format": "standard --verbose --fix -w bin/*.js src/*.js",
     "issues": "git-issues",
     "license": "license-checker --production --onlyunknown --csv",
     "lint": "standard --verbose bin/*.js src/*.js",
@@ -84,8 +84,7 @@
     "rollup-plugin-node-resolve": "2.0.0",
     "rollup-plugin-multi-entry": "^2.0.1",
     "semantic-release": "^4.3.5",
-    "standard": "7.1.2",
-    "standard-format": "2.2.1",
+    "standard": "9.0.2",
     "stop-build": "1.0.1"
   },
   "dependencies": {
