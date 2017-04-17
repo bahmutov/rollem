@@ -5,8 +5,8 @@ const path = require('path')
 
 function isParentFolder (parentPath, childPath) {
   const relative = path.relative(parentPath, childPath)
-  let retValue = false;
-  
+  let retValue = false
+
   if (relative) {
     if (relative.startsWith('..')) {
       // ** should always be chosen over any specified folders
@@ -17,7 +17,7 @@ function isParentFolder (parentPath, childPath) {
       retValue = true
     }
   }
-  
+
   return retValue
 }
 
@@ -43,7 +43,7 @@ function globifyFolders (folders) {
 }
 
 function mergeFolders (filenames) {
-  const flattedFilenames = R.flatten(filenames);
+  const flattedFilenames = R.flatten(filenames)
   const cleanedFolders = R.map(R.compose(normalizeGlob, path.normalize, path.dirname), flattedFilenames)
   const uniqFolders = R.uniq(cleanedFolders)
 

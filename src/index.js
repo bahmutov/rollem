@@ -56,7 +56,7 @@ function rollem (configs, options) {
     const gaze = require('gaze')
     const EventEmitter = require('events')
     const watcher = new EventEmitter()
-    
+
     gaze(folders, (err, gazeWatcher) => {
       if (err) {
         watcher.emit('failed', err)
@@ -67,7 +67,7 @@ function rollem (configs, options) {
         })
       }
     })
-    
+
     return Promise.resolve(watcher)
   } else {
     return buildBundles(configs)
