@@ -8,9 +8,9 @@ const path = require('path')
 
 const {
   appendDoubleStars,
-  globifyFolders,
+  // globifyFolders,
   isChildFolder,
-  isParentFolder,
+  // isParentFolder,
   mergeFolders,
   normalizeGlob
 } = require('./merge-folders')
