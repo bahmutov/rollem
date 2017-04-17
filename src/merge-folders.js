@@ -3,7 +3,7 @@
 const R = require('ramda')
 const path = require('path')
 
-const isParentFolder = (parentPath, childPath) => {
+const isParentFolder = R.curry((parentPath, childPath) => {
   const relative = path.relative(parentPath, childPath)
   let retValue = false
 
@@ -19,12 +19,12 @@ const isParentFolder = (parentPath, childPath) => {
   }
 
   return retValue
-}
+})
 
-const isChildFolder = (childPath, parentPath) => isParentFolder(parentPath, childPath)
+const isChildFolder = R.flip(isParentFolder)
 
 // collapses multiple sequential '**/' parts into a single '**/'
-const normalizeGlob = folder => folder.replace(/\*\*([\\/])(?:\*\*[\\/])+/g, '**$1')
+const normalizeGlob = R.replace(/\*\*([\\/])(?:\*\*[\\/])+/g, '**$1')
 
 const appendDoubleStars = folder => folder + (
   folder.endsWith(path.sep + '**')
@@ -32,7 +32,7 @@ const appendDoubleStars = folder => folder + (
   : (folder.endsWith(path.sep) ? '' : path.sep) + '**'
 )
 
-const globifyFolders = folders => R.map(appendDoubleStars, folders)
+const globifyFolders = R.map(appendDoubleStars)
 
 const mergeFolders = filenames => {
   const flattedFilenames = R.flatten(filenames)
