@@ -1,0 +1,3 @@
+#!/bin/sh
+
+t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";
