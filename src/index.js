@@ -3,8 +3,11 @@
 const debug = require('debug')('rollem')
 const rollup = require('rollup')
 const R = require('ramda')
-const mergeFolders = require('./merge-folders').merge
-const globifyFolders = require('./merge-folders').globify
+
+const {
+  mergeFolders,
+  globifyFolders
+} = require('./merge-folders')
 
 function buildBundle (config) {
   return rollup.rollup(config)
@@ -53,7 +56,7 @@ function rollem (configs, options) {
     const gaze = require('gaze')
     const EventEmitter = require('events')
     const watcher = new EventEmitter()
-    
+
     gaze(folders, (err, gazeWatcher) => {
       if (err) {
         watcher.emit('failed', err)
@@ -64,7 +67,7 @@ function rollem (configs, options) {
         })
       }
     })
-    
+
     return Promise.resolve(watcher)
   } else {
     return buildBundles(configs)
