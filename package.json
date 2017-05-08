@@ -64,11 +64,11 @@
     "test": "npm run unit",
     "unit": "mocha src/*-spec.js",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "test-default-es5": "cd test/es5-config; npm test",
-    "test-specified-es5": "cd test/specific-config; npm test",
-    "test-es6": "cd test/es6-config; npm test",
-    "test-plugins": "cd test/with-plugins; npm test",
-    "test-multi-entry": "cd test/with-multi-entry-plugin; npm test",
+    "test-default-es5": "cd test/es5-config && npm test",
+    "test-specified-es5": "cd test/specific-config && npm test",
+    "test-es6": "cd test/es6-config && npm test",
+    "test-plugins": "cd test/with-plugins && npm test",
+    "test-multi-entry": "cd test/with-multi-entry-plugin && npm test",
     "e2e": "npm run test-default-es5 && npm run test-specified-es5 && npm run test-es6 && npm run test-plugins && npm run test-multi-entry"
   },
   "devDependencies": {
