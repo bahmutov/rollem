@@ -4,7 +4,7 @@
 
 const fs = require('fs')
 const join = require('path').join
-const argv = require('minimist')(process.argv.slice(2))
+const argv = require('minimist')(process.argv.slice(2), {string: 'c'})
 
 const configFilename = argv.c || 'rollem.config.js'
 
