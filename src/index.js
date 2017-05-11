@@ -68,6 +68,7 @@ function rollem (configs, options) {
       }
     })
 
+    buildBundles(configs).then(() => watcher.emit('rolled'))
     return Promise.resolve(watcher)
   } else {
     return buildBundles(configs)
