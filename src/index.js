@@ -61,13 +61,14 @@ function rollem (configs, options) {
       if (err) {
         watcher.emit('failed', err)
       } else {
-        gazeWatcher.on('all', () => {
-          watcher.emit('changed')
-          buildBundles(configs).then(() => watcher.emit('rolled'))
+        gazeWatcher.on('all', (_event, filepath) => {
+          watcher.emit('changed', filepath)
+          buildBundles(configs).then((files) => watcher.emit('rolled', files))
         })
       }
     })
 
+    buildBundles(configs).then((files) => watcher.emit('rolled', files))
     return Promise.resolve(watcher)
   } else {
     return buildBundles(configs)
