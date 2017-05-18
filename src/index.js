@@ -18,7 +18,8 @@ function buildBundle (config) {
         globals: config.globals,
         moduleName: config.moduleName,
         sourceMap: config.sourceMap,
-        interop: config.interop
+        interop: config.interop,
+        banner: config.banner
       }).then(() => config.dest)
     })
 }
