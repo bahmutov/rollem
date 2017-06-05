@@ -7,6 +7,10 @@
 [![semantic-release][semantic-image] ][semantic-url]
 [![js-standard-style][standard-image]][standard-url]
 
+# Deprecated
+
+**Rollup 0.42+ supports multiple configs per file exactly like `rollem`.**
+
 ## Why?
 
 [Rollup](http://rollupjs.org/) is great, but
